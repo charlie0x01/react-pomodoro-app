@@ -60,6 +60,8 @@ const Pomodoro = ({ show, doEditing, onSave, doSettings }) => {
       payload: { ...pomodoro, name: "Pomodoro" },
     });
     clearState();
+
+    toast.success("settings applied successfully.")
   };
 
   // change settings

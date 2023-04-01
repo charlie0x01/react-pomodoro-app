@@ -27,7 +27,7 @@ const Navbar = () => {
             </p>
           </div>
           <div className="is-flex is-align-items-center" style={{ gap: 10 }}>
-            <span className="tag is-primary">{state.pomodoros.length}</span>
+            {/* <span className="tag is-primary">{state.pomodoros.length}</span>
             <button
               onClick={() =>
                 setPomoAttributes({
@@ -38,7 +38,7 @@ const Navbar = () => {
               className="button is-primary"
             >
               New Pomo
-            </button>
+            </button> */}
             <button
               onClick={() =>
                 setPomoAttributes({

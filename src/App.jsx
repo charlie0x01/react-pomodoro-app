@@ -1,17 +1,17 @@
 import { ToastContainer } from "react-toastify";
 import Navbar from "./components/Navbar";
+import StartSection from "./sections/StartSection";
 import { PomodoroContextProvider } from "./PomoContext";
-import BodySection from "./sections/bodySection";
 
 function App() {
   return (
     <>
       <PomodoroContextProvider>
         <Navbar />
-        <BodySection />
+        <StartSection />
       </PomodoroContextProvider>
       <ToastContainer
-        position="top-center"
+        position="bottom-right"
         autoClose={3000}
         hideProgressBar={false}
         newestOnTop={false}
