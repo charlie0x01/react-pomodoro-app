@@ -5,7 +5,7 @@ import {
   CHANGE_DEFAULT_SETTINGS,
   CREATE_POMODORO,
   PomodoroContext,
-} from "../PomoContext";
+} from "../context/PomoContext";
 
 const Pomodoro = ({ show, doEditing, onSave, doSettings }) => {
   const { dispatch } = useContext(PomodoroContext);
@@ -61,7 +61,7 @@ const Pomodoro = ({ show, doEditing, onSave, doSettings }) => {
     });
     clearState();
 
-    toast.success("settings applied successfully.")
+    toast.success("settings applied successfully.");
   };
 
   // change settings

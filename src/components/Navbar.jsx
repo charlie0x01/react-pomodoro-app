@@ -1,12 +1,14 @@
 import React, { useContext, useState } from "react";
-import { PomodoroContext } from "../PomoContext";
+import { PomodoroContext } from "../context/PomoContext";
 import Pomodoro from "./Pomodoro";
 
 // assets
 import pomodoroImage from "../assets/images/pomodoro.png";
+import UserContext from "../context/UserContext";
 
 const Navbar = () => {
   const { state } = useContext(PomodoroContext);
+  const { user, handleLogout } = useContext(UserContext);
   const [pomoAttributes, setPomoAttributes] = useState({
     show: false,
     onSave: () => setPomoAttributes({ ...pomoAttributes, show: false }),
@@ -26,32 +28,37 @@ const Navbar = () => {
               MR.POMODORO
             </p>
           </div>
-          <div className="is-flex is-align-items-center" style={{ gap: 10 }}>
-            {/* <span className="tag is-primary">{state.pomodoros.length}</span>
+          {user !== null ? (
+            <div className="is-flex is-align-items-center" style={{ gap: 10 }}>
+              {/* <span className="tag is-primary">{state.pomodoros.length}</span>
             <button
-              onClick={() =>
-                setPomoAttributes({
-                  ...pomoAttributes,
-                  show: true,
-                })
-              }
-              className="button is-primary"
+            onClick={() =>
+              setPomoAttributes({
+                ...pomoAttributes,
+                show: true,
+              })
+            }
+            className="button is-primary"
             >
-              New Pomo
-            </button> */}
-            <button
-              onClick={() =>
-                setPomoAttributes({
-                  ...pomoAttributes,
-                  show: true,
-                  doSettings: true,
-                })
-              }
-              className="button is-primary"
-            >
-              Settings
-            </button>
-          </div>
+            New Pomo
+          </button> */}
+              <button
+                onClick={() =>
+                  setPomoAttributes({
+                    ...pomoAttributes,
+                    show: true,
+                    doSettings: true,
+                  })
+                }
+                className="button is-primary"
+              >
+                Settings
+              </button>
+              <button className="button is-primary" onClick={handleLogout}>
+                Logout
+              </button>
+            </div>
+          ) : null}
         </div>
       </nav>
       <Pomodoro {...pomoAttributes} />

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import Stopwatch from "../components/Stopwatch";
-import { PomodoroContext } from "../PomoContext";
+import { PomodoroContext } from "../context/PomoContext";
 
 const StartSection = () => {
   const { state } = useContext(PomodoroContext);

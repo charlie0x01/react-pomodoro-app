@@ -7,3 +7,13 @@
 .no-margin {
   margin: 0 !important;
 }
+
+html, body {
+  height: 100%;
+  height: 100dvh;
+  height: 100vh;
+}
+
+.error {
+  color: red !important;
+}
