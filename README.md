@@ -4,7 +4,7 @@ The Pomodoro technique is a popular time management method developed in the late
 I'm Learning ReactJS so I decided to build a Pomodoro App with above mention methods. If you didn't used any Pomodoro App, I would hightly recommend you, use this one. give this repo a star if you like.
 
 ## to use this app
-- make sure you have Node installed on your system
+- make sure you have Git & NodeJS installed on your system
 - first clone it with  `git clone https://github.com/charlie0x01/react-pomodoro-app.git`
 - move into the downloaded directory and open a terminal in that directory
 - run `npm install` to install all the dependencies
