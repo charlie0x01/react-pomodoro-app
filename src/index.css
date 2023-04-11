@@ -17,3 +17,31 @@ html, body {
 .error {
   color: red !important;
 }
+
+.toast {
+  position: absolute !important;
+  right: 0;
+  top: 0;
+}
+
+.notification-animation {
+  animation: slide-down 0.5s ease-in-out, fade-out 0.5s 2.5s ease-in-out forwards;
+}
+
+@keyframes slide-down {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-out {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
