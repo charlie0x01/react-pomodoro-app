@@ -1,5 +1,5 @@
 import React from "react";
-import StartSection from "../sections/StartSection";
+import StartSection from "../sections/HeroSection";
 import PomodorosSection from "../sections/PomodorosSection";
 
 const ContentPage = () => {

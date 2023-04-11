@@ -9,15 +9,13 @@ export const SHOW_POMODORO = "SHOW_POMODORO";
 
 const initState = {
   pomodoros: [],
-  createPomodoro: false,
-  editPomodoro: false,
   defaultSettings: {
     name: "Pomodoro",
     focusTime: 25,
     shortBreak: 5,
     longBreak: 15,
     pomos: 4,
-    color: "#000000",
+    color: 2,
   },
 };
 
@@ -35,6 +33,12 @@ const reducer = (state = initState, action) => {
       return { ...state, pomodoros: [...state.pomodoros, action.payload] };
     case CHANGE_DEFAULT_SETTINGS:
       return { ...state, defaultSettings: { ...action.payload } };
+    case DELETE_POMODOR: {
+      const updated = state.pomodoros.filter(
+        (pomodoro) => pomodoro.id !== action.payload.id
+      );
+      return { ...state, pomodoros: [...updated] };
+    }
     default:
       return state;
   }

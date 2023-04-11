@@ -47,9 +47,9 @@ html, body {
   }
 }
 
-.glossy-avatar {
-  width: 80px;
-  height: 80px;
+.glossy {
+  width: 90px;
+  height: 90px;
   background: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(10px);
   border-radius: 50%;
@@ -71,4 +71,57 @@ html, body {
 
 .error {
   color: red !important;
+}
+
+.top-right-corner {
+  position: absolute !important;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+}
+
+.is-flex-wrap {
+  flex-wrap: wrap !important;
+}
+
+.is-gap-1 {
+  gap: 4px;
+}
+
+.is-gap-2 {
+  gap: 8px;
+}
+
+.is-gap-3 {
+  gap: 12px;
+}
+.is-gap-4 {
+  gap: 16px;
+}
+.is-gap-5 {
+  gap: 20px;
+}
+
+.card-selected {
+  transform: translateY(-10px) scale(1.2);
+  transition: transform 0.3s ease-out;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 25px 50px -12px;
+}
+.card-deselected {
+  transform: translateY(10px) scale(1);
+  transition: transform 0.3s ease-in;
+}
+
+.is-absolute {
+  position: absolute !important;
+}
+
+.pomodoro-card {
+  width: 160px !important;
+  height: 190px !important;
+  border-radius: 20px !important;
+}
+
+.is-border-1 {
+  border: 1px solid black !important;
 }

@@ -1,17 +1,17 @@
 import React, { useContext, useState } from "react";
-import { PomodoroContext } from "../context/PomoContext";
 import Pomodoro from "./Pomodoro";
+import { IoSettings } from "react-icons/Io5";
 
 // assets
 import pomodoroImage from "../assets/images/pomodoro.png";
-import UserContext from "../context/UserContext";
+import { buttonColors } from "../utils";
+import { PomodoroContext } from "../context/PomoContext";
 
 const Navbar = () => {
   const { state } = useContext(PomodoroContext);
-  const { user, handleLogout } = useContext(UserContext);
   const [pomoAttributes, setPomoAttributes] = useState({
     show: false,
-    onSave: () => setPomoAttributes({ ...pomoAttributes, show: false }),
+    closeModal: () => setPomoAttributes({ ...pomoAttributes, show: false }),
     doSettings: false,
     doEditing: false,
   });
@@ -28,37 +28,31 @@ const Navbar = () => {
               MR.POMODORO
             </p>
           </div>
-          {user !== null ? (
-            <div className="is-flex is-align-items-center" style={{ gap: 10 }}>
-              {/* <span className="tag is-primary">{state.pomodoros.length}</span>
+          <div className="is-flex is-align-items-center" style={{ gap: 10 }}>
             <button
-            onClick={() =>
-              setPomoAttributes({
-                ...pomoAttributes,
-                show: true,
-              })
-            }
-            className="button is-primary"
+              onClick={() =>
+                setPomoAttributes({
+                  ...pomoAttributes,
+                  show: true,
+                })
+              }
+              className={`button ${buttonColors[state.defaultSettings.color]}`}
             >
-            New Pomo
-          </button> */}
-              <button
-                onClick={() =>
-                  setPomoAttributes({
-                    ...pomoAttributes,
-                    show: true,
-                    doSettings: true,
-                  })
-                }
-                className="button is-primary"
-              >
-                Settings
-              </button>
-              <button className="button is-primary" onClick={handleLogout}>
-                Logout
-              </button>
-            </div>
-          ) : null}
+              Add Pomodoro
+            </button>
+            <button
+              onClick={() =>
+                setPomoAttributes({
+                  ...pomoAttributes,
+                  show: true,
+                  doSettings: true,
+                })
+              }
+              className={`button ${buttonColors[state.defaultSettings.color]}`}
+            >
+              <IoSettings />
+            </button>
+          </div>
         </div>
       </nav>
       <Pomodoro {...pomoAttributes} />

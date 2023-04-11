@@ -5,9 +5,12 @@ import {
   PomodoroContext,
 } from "../context/PomoContext";
 import Toast from "./ToastNotification";
+import { db } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
 import Modal from "./Modal";
 import { useFormik } from "formik";
-import { colors } from "../utils";
+import { buttonColors, colors } from "../utils";
+import { v4 as uuid } from "uuid";
 import Color from "./Color";
 
 const initialValues = {
@@ -45,13 +48,31 @@ const validate = (values) => {
   return errors;
 };
 
-const Pomodoro = ({ show, doEditing, onSave, doSettings }) => {
+const Pomodoro = ({ show, doEditing, closeModal, doSettings }) => {
+  const { state, dispatch } = useContext(PomodoroContext);
   // form state
   const formik = useFormik({
-    initialValues,
+    initialValues: state.defaultSettings,
     validate,
+    onSubmit: (values) => {
+      const pomodoro = {
+        ...values,
+        id: uuid(),
+      };
+      if (doSettings === true) {
+        dispatch({
+          type: CHANGE_DEFAULT_SETTINGS,
+          payload: { ...values },
+        });
+        return;
+      }
+
+      // create new pomodoro
+      dispatch({ type: CREATE_POMODORO, payload: { ...pomodoro } });
+
+      closeModal();
+    },
   });
-  const { dispatch } = useContext(PomodoroContext);
 
   // create pomo
   // const handleSave = () => {
@@ -72,22 +93,25 @@ const Pomodoro = ({ show, doEditing, onSave, doSettings }) => {
 
   return (
     <Modal show={show}>
-      <p className="title">{doSettings ? "Pomodoro Settings" : "Pomodoro"}</p>
+      <p className="title">
+        {doSettings === true || doEditing === true
+          ? "Change Default Settings"
+          : "Add New Pomodoro"}
+      </p>
       <form onSubmit={formik.handleSubmit}>
-        {doSettings === false ? (
-          <div className="block">
-            <lable className="subtitle">Name</lable>
-            <input
-              {...formik.getFieldProps("name")}
-              className="input mt-2"
-              type="text"
-              placeholder="Pomodoro Name"
-            />
-            {formik.touched.name && formik.errors.name ? (
-              <div className="error">{formik.errors.name}</div>
-            ) : null}
-          </div>
-        ) : null}
+        <div className="block">
+          <lable className="subtitle">Name</lable>
+          <input
+            {...formik.getFieldProps("name")}
+            className="input mt-2"
+            type="text"
+            placeholder="Pomodoro Name"
+          />
+          {formik.touched.name && formik.errors.name ? (
+            <div className="error">{formik.errors.name}</div>
+          ) : null}
+        </div>
+
         <div className="block">
           <lable className="subtitle">Focus Time (mins)</lable>
           <input
@@ -143,32 +167,38 @@ const Pomodoro = ({ show, doEditing, onSave, doSettings }) => {
           <p>Focus Time + Break tiem is a pomo. normally 4 sets</p>
           <p></p>
         </div>
-        {doSettings === false ? (
-          <div
-            className="block is-flex is-align-items-center"
-            style={{ gap: 8 }}
-          >
-            <span>
-              <lable className="subtitle">Color</lable>
-            </span>
-            <div className="is-flex ml-3" style={{ gap: 10 }}>
-              {colors.map((color, index) => {
-                return (
-                  <Color
-                    key={index}
-                    color={color}
-                    onClick={() => formik.setFieldValue("color", index)}
-                    isSelected={formik.values.color === index && true}
-                  />
-                );
-              })}
-            </div>
+        <div className="block is-flex is-align-items-center" style={{ gap: 8 }}>
+          <span>
+            <lable className="subtitle">Color</lable>
+          </span>
+          <div className="is-flex ml-3" style={{ gap: 10 }}>
+            {colors.map((color, index) => {
+              return (
+                <Color
+                  key={index}
+                  color={color}
+                  onClick={() => formik.setFieldValue("color", index)}
+                  isSelected={formik.values.color === index && true}
+                />
+              );
+            })}
           </div>
-        ) : (
-          <></>
-        )}
+        </div>
         <div className="is-flex is-justify-content-end" style={{ gap: 10 }}>
-          <button className="button is-danger">Cancel</button>
+          <button
+            type="submit"
+            className={`button ${buttonColors[state.defaultSettings.color]}`}
+          >
+            {doEditing === true || doSettings === true
+              ? "Apply Changes"
+              : "Save"}
+          </button>
+          <button
+            onClick={closeModal}
+            className={`button ${buttonColors[state.defaultSettings.color]}`}
+          >
+            Cancel
+          </button>
         </div>
       </form>
     </Modal>
