@@ -1,1 +1,3 @@
 export const colors = ["has-background-primary", "has-background-warning", "has-background-danger", "has-background-info", "has-background-success", "has-background-dark", "has-background-link"]
+export const lightColors = ["has-background-primary-light", "has-background-warning-light", "has-background-danger-light", "has-background-info-light", "has-background-success-light", "has-background-dark-light", "has-background-link-light"]
+export const buttonColors = ["is-primary", "is-warning", "is-danger", "is-info", "is-success", "is-dark", "is-link"]
