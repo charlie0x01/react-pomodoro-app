@@ -22,22 +22,25 @@ const PomodorosSection = () => {
     dispatch({ type: DELETE_POMODOR, payload: { id: id } });
   };
   return (
-    <div className="is-flex is-flex-wrap is-flex-direction-row is-gap-3 p-5">
-      {state.pomodoros.length > 0
-        ? state.pomodoros.map((pomodoro, index) => {
-            return (
-              <PomodorCard
-                color={colors[pomodoro.color]}
-                key={index}
-                id={pomodoro.id}
-                title={pomodoro.name}
-                focusTime={pomodoro.focusTime}
-                onClick={() => handleOnClick(pomodoro.id)}
-                onDelete={() => handleOnDelete(pomodoro.id)}
-              />
-            );
-          })
-        : null}
+    <div className="p-5">
+      <h1 className="title">Pomodoros</h1>
+      <div className="is-flex is-flex-wrap is-flex-direction-row is-gap-3">
+        {state.pomodoros.length > 0
+          ? state.pomodoros.map((pomodoro, index) => {
+              return (
+                <PomodorCard
+                  color={colors[pomodoro.color]}
+                  key={index}
+                  id={pomodoro.id}
+                  title={pomodoro.name}
+                  focusTime={pomodoro.focusTime}
+                  onClick={() => handleOnClick(pomodoro.id)}
+                  onDelete={() => handleOnDelete(pomodoro.id)}
+                />
+              );
+            })
+          : null}
+      </div>
     </div>
   );
 };
