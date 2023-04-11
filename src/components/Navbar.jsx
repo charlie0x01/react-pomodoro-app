@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import Pomodoro from "./Pomodoro";
-import { IoSettings } from "react-icons/Io5";
+import { BsFillNutFill } from "react-icons/bs";
 
 // assets
 import pomodoroImage from "../assets/images/pomodoro.png";
@@ -50,7 +50,7 @@ const Navbar = () => {
               }
               className={`button ${buttonColors[state.defaultSettings.color]}`}
             >
-              <IoSettings />
+              <BsFillNutFill />
             </button>
           </div>
         </div>
