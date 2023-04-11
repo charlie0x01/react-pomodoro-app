@@ -1,0 +1,1 @@
+export const colors = ["has-background-primary", "has-background-warning", "has-background-danger", "has-background-info", "has-background-success", "has-background-dark", "has-background-link"]

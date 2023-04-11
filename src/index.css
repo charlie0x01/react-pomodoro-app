@@ -20,9 +20,10 @@ html, body {
 
 .toast {
   position: absolute !important;
-  right: 0;
-  top: 0;
+  right: 15px;
+  top: 30px;
 }
+
 
 .notification-animation {
   animation: slide-down 0.5s ease-in-out, fade-out 0.5s 2.5s ease-in-out forwards;
@@ -44,4 +45,30 @@ html, body {
   100% {
     opacity: 0;
   }
+}
+
+.glossy-avatar {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border-radius: 50%;
+  box-shadow: 0 8px 32px 0 rgba(255, 255, 255, 0.2), 
+              0 5px 15px 0 rgba(0, 0, 0, 0.07);
+  backdrop-filter: blur(20px);
+}
+
+
+.text-overflow {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.color-selected {
+  border: 3px solid rgb(255, 255, 255);
+}
+
+.error {
+  color: red !important;
 }

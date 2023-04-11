@@ -1,208 +1,177 @@
 import React, { useContext, useState } from "react";
-import { createPortal } from "react-dom";
-import { toast } from "react-toastify";
 import {
   CHANGE_DEFAULT_SETTINGS,
   CREATE_POMODORO,
   PomodoroContext,
 } from "../context/PomoContext";
+import Toast from "./ToastNotification";
+import Modal from "./Modal";
+import { useFormik } from "formik";
+import { colors } from "../utils";
+import Color from "./Color";
+
+const initialValues = {
+  name: "",
+  focusTime: 25,
+  shortBreak: 5,
+  longBreak: 15,
+  pomos: 4,
+  color: 0,
+};
+
+const validate = (values) => {
+  let errors = {};
+
+  // validate title
+  if (!values.name) errors.name = "Required";
+  else if (values.name.length < 2)
+    errors.name = "Title should contain at least 2 character";
+
+  // focus time
+  if (values.focusTime < 1 || values.focusTime > 90)
+    errors.focusTime = "Focus Time duration should be between 1 to 90 mins";
+
+  // short break
+  if (values.shortBreak < 1 || values.shortBreak > 10)
+    errors.shortBreak = "Short Break duration should be between 1 to 10 mins";
+
+  // long break
+  if (values.longBreak < 5 || values.longBreak > 20)
+    errors.longBreak = "Long Break duration should be between 5 to 20 mins";
+
+  // pomos
+  if (values.pomos < 1) errors.pomos = "Add at least one Pomo";
+
+  return errors;
+};
 
 const Pomodoro = ({ show, doEditing, onSave, doSettings }) => {
-  const { dispatch } = useContext(PomodoroContext);
-  // local state
-  const [pomodoro, setPomodoro] = useState({
-    name: "",
-    focusTime: 25,
-    shortBreak: 5,
-    longBreak: 15,
-    pomos: 4,
-    color: "#000000",
+  // form state
+  const formik = useFormik({
+    initialValues,
+    validate,
   });
-
-  // clear state
-  const clearState = () => {
-    setPomodoro({
-      name: "",
-      focusTime: 25,
-      shortBreak: 5,
-      longBreak: 15,
-      pomos: 4,
-      color: "#000000",
-    });
-    onSave();
-  };
+  const { dispatch } = useContext(PomodoroContext);
 
   // create pomo
-  const handleSave = () => {
-    if (
-      pomodoro.name.length < 1 ||
-      pomodoro.focusTime === 0 ||
-      pomodoro.shortBreak === 0 ||
-      pomodoro.longBreak === 0
-    ) {
-      return;
-    }
+  // const handleSave = () => {
+  //   dispatch({ type: CREATE_POMODORO, payload: pomodoro });
 
-    if (pomodoro.color === "#ffffff") {
-      toast.info("background color can't be white because text color is.");
-      return;
-    }
+  //   clearState();
+  // };
 
-    dispatch({ type: CREATE_POMODORO, payload: pomodoro });
+  // // change default settings
+  // const changeDefaultSettings = () => {
+  //   dispatch({
+  //     type: CHANGE_DEFAULT_SETTINGS,
+  //     payload: { ...pomodoro, name: "Pomodoro" },
+  //   });
 
-    clearState();
-  };
+  //   Toast("Settings Applied Successfully", "is-primary", 10000);
+  // };
 
-  // change default settings
-  const changeDefaultSettings = () => {
-    dispatch({
-      type: CHANGE_DEFAULT_SETTINGS,
-      payload: { ...pomodoro, name: "Pomodoro" },
-    });
-    clearState();
-
-    toast.success("settings applied successfully.");
-  };
-
-  // change settings
-  const handleChange = () => {};
-
-  // conditional buttons
-  const renderButtons = () => {
-    if (doSettings === true)
-      return (
-        <button onClick={changeDefaultSettings} className="button is-primary">
-          Apply Settings
-        </button>
-      );
-    else if (doEditing === true) return <button>Apply Changes</button>;
-    else return <button className="button is-primary">Create Pomodoro</button>;
-  };
-
-  if (show === false) return null;
-  return createPortal(
-    <div className="modal is-active">
-      <div className="modal-background"></div>
-      <div className="modal-content" style={{ maxWidth: 400 }}>
-        <div className="box">
-          <p className="title">
-            {doSettings ? "Pomodoro Settings" : "Pomodoro"}
-          </p>
-          {doSettings === false ? (
-            <div className="block">
-              <lable className="subtitle">Name</lable>
-              <input
-                value={pomodoro.name}
-                onChange={(e) =>
-                  setPomodoro({ ...pomodoro, name: e.target.value })
-                }
-                className="input mt-2"
-                type="text"
-                placeholder="Pomodoro Name"
-              />
-            </div>
-          ) : (
-            <></>
-          )}
+  return (
+    <Modal show={show}>
+      <p className="title">{doSettings ? "Pomodoro Settings" : "Pomodoro"}</p>
+      <form onSubmit={formik.handleSubmit}>
+        {doSettings === false ? (
           <div className="block">
-            <lable className="subtitle">Focus Time (mins)</lable>
+            <lable className="subtitle">Name</lable>
             <input
-              defaultValue={25}
-              value={pomodoro.focusTime}
-              onChange={(e) =>
-                setPomodoro({
-                  ...pomodoro,
-                  focusTime: parseInt(e.target.value),
-                })
-              }
+              {...formik.getFieldProps("name")}
               className="input mt-2"
-              type="number"
+              type="text"
+              placeholder="Pomodoro Name"
             />
-            <p>Time for a Focus Period is normally 25 mins</p>
-            <p></p>
+            {formik.touched.name && formik.errors.name ? (
+              <div className="error">{formik.errors.name}</div>
+            ) : null}
           </div>
-          <div className="block">
-            <lable className="subtitle">Short Break (mins)</lable>
-            <input
-              defaultValue={5}
-              value={pomodoro.shortBreak}
-              onChange={(e) =>
-                setPomodoro({
-                  ...pomodoro,
-                  shortBreak: parseInt(e.target.value),
-                })
-              }
-              className="input mt-2"
-              type="number"
-              placeholder="Text input"
-            />
-            <p>Time for short rest between pomos is normally 5 mins</p>
-          </div>
-          <div className="block">
-            <lable className="subtitle">Long Break (mins)</lable>
-            <input
-              defaultValue={15}
-              value={pomodoro.longBreak}
-              onChange={(e) =>
-                setPomodoro({
-                  ...pomodoro,
-                  longBreak: parseInt(e.target.value),
-                })
-              }
-              className="input mt-2"
-              type="number"
-              placeholder="Text input"
-            />
-            <p>Time for long rest between pomo sets is normally 15 mins</p>
-            <p></p>
-          </div>
-          <div className="block">
-            <lable className="subtitle">Set of Pomo (pomos)</lable>
-            <input
-              defaultValue={4}
-              value={pomodoro.pomos}
-              onChange={(e) =>
-                setPomodoro({ ...pomodoro, pomos: parseInt(e.target.value) })
-              }
-              className="input mt-2"
-              type="number"
-              placeholder="Text input"
-            />
-            <p>Focus Time + Break tiem is a pomo. normally 4 sets</p>
-            <p></p>
-          </div>
-          {doSettings === false ? (
-            <div
-              className="block is-flex is-align-items-center"
-              style={{ gap: 8 }}
-            >
-              <span>
-                <lable className="subtitle">Color</lable>
-              </span>
-              <input
-                style={{ width: 50 }}
-                className="input"
-                value={pomodoro.color}
-                type="color"
-                placeholder="Text input"
-                onChange={(e) =>
-                  setPomodoro({ ...pomodoro, color: e.target.value })
-                }
-              />
-            </div>
-          ) : (
-            <></>
-          )}
-          <div className="is-flex is-justify-content-end" style={{ gap: 10 }}>
-            {renderButtons()}
-            <button onClick={clearState} className="button is-danger">
-              Cancel
-            </button>
-          </div>
+        ) : null}
+        <div className="block">
+          <lable className="subtitle">Focus Time (mins)</lable>
+          <input
+            min={1}
+            max={90}
+            {...formik.getFieldProps("focusTime")}
+            className="input mt-2"
+            type="number"
+          />
+          {formik.touched.focusTime && formik.errors.focusTime ? (
+            <div className="error">{formik.errors.focusTime}</div>
+          ) : null}
+          <p>Time for a Focus Period is normally 25 mins</p>
         </div>
-      </div>
-    </div>,
-    document.getElementById("portal-root")
+        <div className="block">
+          <lable className="subtitle">Short Break (mins)</lable>
+          <input
+            {...formik.getFieldProps("shortBreak")}
+            className="input mt-2"
+            type="number"
+            placeholder="Text input"
+          />
+          {formik.touched.shortBreak && formik.errors.shortBreak ? (
+            <div className="error">{formik.errors.shortBreak}</div>
+          ) : null}
+          <p>Time for short rest between pomos is normally 5 mins</p>
+        </div>
+        <div className="block">
+          <lable className="subtitle">Long Break (mins)</lable>
+          <input
+            {...formik.getFieldProps("longBreak")}
+            className="input mt-2"
+            type="number"
+          />
+          {formik.touched.longBreak && formik.errors.longBreak ? (
+            <div className="error">{formik.errors.longBreak}</div>
+          ) : null}
+          <p>Time for long rest between pomo sets is normally 15 mins</p>
+          <p></p>
+        </div>
+        <div className="block">
+          <lable htmlFor="pomos" className="subtitle">
+            Set of Pomo (pomos)
+          </lable>
+          <input
+            {...formik.getFieldProps("pomos")}
+            className="input mt-2"
+            type="number"
+          />
+          {formik.touched.pomos && formik.errors.pomos ? (
+            <div className="error">{formik.errors.pomos}</div>
+          ) : null}
+          <p>Focus Time + Break tiem is a pomo. normally 4 sets</p>
+          <p></p>
+        </div>
+        {doSettings === false ? (
+          <div
+            className="block is-flex is-align-items-center"
+            style={{ gap: 8 }}
+          >
+            <span>
+              <lable className="subtitle">Color</lable>
+            </span>
+            <div className="is-flex ml-3" style={{ gap: 10 }}>
+              {colors.map((color, index) => {
+                return (
+                  <Color
+                    key={index}
+                    color={color}
+                    onClick={() => formik.setFieldValue("color", index)}
+                    isSelected={formik.values.color === index && true}
+                  />
+                );
+              })}
+            </div>
+          </div>
+        ) : (
+          <></>
+        )}
+        <div className="is-flex is-justify-content-end" style={{ gap: 10 }}>
+          <button className="button is-danger">Cancel</button>
+        </div>
+      </form>
+    </Modal>
   );
 };
 
